@@ -1,14 +1,18 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
+import Modal from '../../src/components/Modal'
+import Alert from '../../src/components/Alert'
 import Show from '../../src/components/Show'
 import Layout from '../../src/components/Layout'
 import Button from '../../src/components/Button'
 import Spinner from '../../src/components/Spinner'
 import { truncate } from '../../src/utils/formatter'
-import { TUpdateActivity } from '../../src/services/types'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { createTodo, deleteTodo, updateTodo } from '../../src/services/todoService'
+import { TUpdateActivity, TCreateTodo, TGetAllTodo, TUpdateTodo } from '../../src/services/types'
 import { getActivity, updateActivity } from '../../src/services/activityService'
+import TodoItem from '../../src/components/TodoItem'
 
 interface baseProps {
   data: any
@@ -20,7 +24,8 @@ function TitleAndAction({ data }: baseProps) {
   const [isEditTitle, setIsEditTitle] = useState(false)
   const router = useRouter()
   const queryClient = useQueryClient()
-  const mutation = useMutation(updateActivity)
+  const activityMutation = useMutation(updateActivity)
+  const todoMutation = useMutation(createTodo)
 
   useEffect(() => {
     setTitle(data?.title)
@@ -31,7 +36,7 @@ function TitleAndAction({ data }: baseProps) {
       id: data?.id,
       title: title,
     }
-    mutation.mutate(body, {
+    activityMutation.mutate(body, {
       onSuccess: () => {
         queryClient.invalidateQueries('todo')
       },
@@ -51,7 +56,16 @@ function TitleAndAction({ data }: baseProps) {
   }
 
   const onClickAdd = () => {
-    alert('add')
+    const body: TCreateTodo = {
+      title: 'New Todo',
+      activity_group_id: data?.id,
+      priority: 'very-high',
+    }
+    todoMutation.mutate(body, {
+      onSuccess: () => {
+        queryClient.invalidateQueries('todo')
+      },
+    })
   }
 
   const onKeyDown = (e: any) => {
@@ -73,8 +87,8 @@ function TitleAndAction({ data }: baseProps) {
   }
 
   return (
-    <div className='flex justify-between items-center'>
-      <div className='flex items-center gap-5'>
+    <div className='flex flex-col sm:flex-row max-sm:gap-8 justify-between items-start sm:items-center'>
+      <div className='flex items-center gap-5 max-sm:w-full'>
         <Button type='icon' onClick={onClickBack} dataCy='todo-back-button'>
           <Image src='/back-icon.svg' width={15} height={15} alt='todo-back-button' />
         </Button>
@@ -87,7 +101,7 @@ function TitleAndAction({ data }: baseProps) {
             onChange={onChange}
             onKeyDown={onKeyDown}
             style={{ lineHeight: 'inherit' }}
-            className='border-b border-black bg-transparent text-3xl font-bold outline-none'
+            className='border-b border-gray-400 bg-transparent text-3xl font-bold outline-none'
           />
         </Show>
         <Show when={!isEditTitle}>
@@ -100,11 +114,11 @@ function TitleAndAction({ data }: baseProps) {
             {truncate(title, 30)}
           </h1>
           <Button dataCy='todo-title-edit-button' onClick={onClickEdit} type='icon'>
-            <Image src='/edit-icon.svg' width={15} height={15} alt='todo-back-button' />
+            <Image src='/edit-icon.svg' width={18} height={18} alt='todo-back-button' />
           </Button>
         </Show>
       </div>
-      <div className='flex items-center gap-5'>
+      <div className='flex items-center gap-5 max-sm:w-full max-sm:justify-end'>
         <Show when={data && data?.todo_items.length !== 0}>
           <div className='sort-container'>
             <Button
@@ -124,12 +138,66 @@ function TitleAndAction({ data }: baseProps) {
 }
 
 function Content({ data, isLoading }: baseProps) {
+  const isTodoEmpty = data && data?.todo_items.length === 0
+  const queryClient = useQueryClient()
+  const [isShowModal, setIsShowModal] = useState(false)
+  const [isShowAlert, setIsShowAlert] = useState(false)
+  const [deleteId, setDeleteId] = useState(0)
+  const [deleteTitle, setDeleteTitle] = useState('')
+  const updateTodoMutation = useMutation(updateTodo)
+  const deleteTodoMutation = useMutation(deleteTodo)
+
+  const onCheckboxChange = (data: TGetAllTodo) => {
+    const body: TUpdateTodo = {
+      id: data?.id,
+      is_active: !data?.is_active,
+      priority: data?.priority,
+    }
+    updateTodoMutation.mutate(body, {
+      onSuccess: () => {
+        queryClient.invalidateQueries('todo')
+      },
+    })
+  }
+
+  const onClickEdit = (id: number) => {
+    const body: TUpdateTodo = {
+      id: id,
+      is_active: false,
+      priority: 'very-high',
+    }
+    updateTodoMutation.mutate(body, {
+      onSuccess: () => {
+        queryClient.invalidateQueries('todo')
+      },
+    })
+  }
+
+  const onClickDelete = () => {
+    deleteTodoMutation.mutate(deleteId, {
+      onSuccess: () => {
+        queryClient.invalidateQueries('todo')
+        setIsShowModal(false)
+        setIsShowAlert(true)
+        setTimeout(() => {
+          setIsShowAlert(false)
+        }, 2000) // close alert after 2s
+      },
+    })
+  }
+
+  const onShowModal = (id: number, title: string) => {
+    setDeleteId(id)
+    setDeleteTitle(title)
+    setIsShowModal(true)
+  }
+
   return (
     <div>
       <Show when={isLoading}>
         <Spinner />
       </Show>
-      <Show when={data && data?.todo_items.length === 0}>
+      <Show when={isTodoEmpty}>
         <Image
           data-cy='todo-empty-state'
           src='/todo-empty-state.svg'
@@ -139,6 +207,37 @@ function Content({ data, isLoading }: baseProps) {
           className='m-auto'
         />
       </Show>
+      <Show when={!isTodoEmpty}>
+        <div className='grid gap-3'>
+          {data?.todo_items.map((data: TGetAllTodo, idx: number) => (
+            <TodoItem
+              key={idx}
+              title={data?.title}
+              priority={data?.priority}
+              isActive={data?.is_active}
+              onCheckboxChange={() => onCheckboxChange(data)}
+              onClickEdit={() => onClickEdit(data?.id)}
+              onClickDelete={() => onShowModal(data?.id, data?.title)}
+            />
+          ))}
+        </div>
+      </Show>
+      <Modal
+        data-cy='modal-delete'
+        isShowModal={isShowModal}
+        iconPath='/modal-delete-icon.svg'
+        title='Apakah anda yakin menghapus list item'
+        description={deleteTitle}
+        setIsShowModal={setIsShowModal}
+        onClickConfirm={() => onClickDelete()}
+      />
+      <Alert
+        data-cy='modal-information'
+        iconPath='/modal-information-icon.svg'
+        message='Todo berhasil dihapus'
+        isShowAlert={isShowAlert}
+        setIsShowAlert={setIsShowAlert}
+      />
     </div>
   )
 }

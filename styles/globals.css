@@ -7,6 +7,7 @@ body {
   padding: 0;
   margin: 0;
   font-family: 'Poppins', sans-serif;
+  background-color: #e5e5e5;
 }
 
 a {
@@ -35,7 +36,7 @@ a {
   }
 
   .base-button {
-    @apply px-6 py-3 rounded-full text-lg font-medium text-white;
+    @apply px-10 py-3 rounded-full text-lg font-medium text-white;
     background-color: #16abf8;
   }
 
@@ -72,7 +73,7 @@ a {
   .activity-item-container {
     box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.1);
     border-radius: 12px;
-    transition: transform 250ms;
+    background-color: white;
   }
 
   .activity-item-title {
@@ -85,16 +86,63 @@ a {
 
   .sort-container {
     @apply border-solid border-2 rounded-full;
-    border-color: #e5e5e5;
+    border-color: #c7c7c7;
   }
 
-  /**
-    * Tablet Breakpoints
-    */
+  .todo-item-container {
+    @apply flex justify-between items-center;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    border-radius: 12px;
+    padding: 30px;
+  }
 
-  @screen md {
-    .activity-item-container:hover {
-      transform: translateY(-5px);
-    }
+  .checkbox {
+    @apply w-5 h-5 border rounded cursor-pointer;
+    border-color: #c7c7c7;
+  }
+
+  .base-priority {
+    @apply w-3 h-3 rounded-full;
+  }
+
+  .priority-very-high {
+    @apply base-priority;
+    background-color: #ed4c5c;
+  }
+
+  .priority-high {
+    @apply base-priority;
+    background-color: #f8a541;
+  }
+
+  .priority-medium {
+    @apply base-priority;
+    background-color: #00a790;
+  }
+
+  .priority-low {
+    @apply base-priority;
+    background-color: #428bc1;
+  }
+
+  .priority-very-low {
+    @apply base-priority;
+    background-color: #8942c1;
+  }
+
+  .todo-item-title-active {
+    @apply line-through text-gray-500;
+  }
+
+  .alert-container {
+    @apply flex gap-3 z-50 bg-white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  .floating-container {
+    @apply justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none;
   }
 }

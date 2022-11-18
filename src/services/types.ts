@@ -28,11 +28,19 @@ export interface TUpdateTodo {
  * Response Type
  */
 
-export interface TGetActivities {
-  id: number
-  email: string
-  title: string
+interface TDate {
   created_at: string
   updated_at: string
   deleted_at?: string
+}
+
+export interface TGetActivities extends TDate {
+  id: number
+  email: string
+  title: string
+}
+
+export interface TGetAllTodo extends TUpdateTodo, TDate {
+  title: string
+  activity_group_id: number
 }

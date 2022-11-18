@@ -1,6 +1,9 @@
 import Image from 'next/image'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Show from '../src/components/Show'
+import Modal from '../src/components/Modal'
+import Alert from '../src/components/Alert'
 import Layout from '../src/components/Layout'
 import Button from '../src/components/Button'
 import Spinner from '../src/components/Spinner'
@@ -39,15 +42,31 @@ function TitleAndAction() {
 function Content() {
   const router = useRouter()
   const queryClient = useQueryClient()
-  const { data, isLoading } = useQuery('activities', getActivities)
+  const [isShowModal, setIsShowModal] = useState(false)
+  const [isShowAlert, setIsShowAlert] = useState(false)
+  const [deleteId, setDeleteId] = useState(0)
+  const [deleteTitle, setDeleteTitle] = useState('')
   const mutation = useMutation(deleteActivity)
+  const { data, isLoading } = useQuery('activities', getActivities)
+  const isActivityEmpty = data && data?.data.length === 0
 
-  const onClickDelete = (id: number) => {
-    mutation.mutate(id, {
+  const onClickDelete = () => {
+    mutation.mutate(deleteId, {
       onSuccess: () => {
         queryClient.invalidateQueries('activities')
+        setIsShowModal(false)
+        setIsShowAlert(true)
+        setTimeout(() => {
+          setIsShowAlert(false)
+        }, 2000) // close alert after 2s
       },
     })
+  }
+
+  const onShowModal = (id: number, title: string) => {
+    setDeleteId(id)
+    setDeleteTitle(title)
+    setIsShowModal(true)
   }
 
   return (
@@ -55,7 +74,7 @@ function Content() {
       <Show when={isLoading}>
         <Spinner />
       </Show>
-      <Show when={data && data?.data.length === 0}>
+      <Show when={isActivityEmpty}>
         <Image
           data-cy='activity-empty-state'
           src='/activity-empty-state.svg'
@@ -65,7 +84,7 @@ function Content() {
           className='m-auto'
         />
       </Show>
-      <Show when={data && data?.data.length > 0}>
+      <Show when={!isActivityEmpty}>
         <div className='grid gap-6 sm:grid-cols-2 md:grid-cols-4'>
           {data?.data.map((data: TGetActivities, idx: number) => (
             <ActivityItem
@@ -73,11 +92,27 @@ function Content() {
               title={data?.title}
               createdAt={formatDate(data?.created_at)}
               onClickTitle={() => router.push(`/activity/${data?.id}`)}
-              onClickDelete={() => onClickDelete(data?.id)}
+              onClickDelete={() => onShowModal(data?.id, data?.title)}
             />
           ))}
         </div>
       </Show>
+      <Modal
+        data-cy='modal-delete'
+        isShowModal={isShowModal}
+        iconPath='/modal-delete-icon.svg'
+        title='Apakah anda yakin menghapus activity'
+        description={deleteTitle}
+        setIsShowModal={setIsShowModal}
+        onClickConfirm={() => onClickDelete()}
+      />
+      <Alert
+        data-cy='modal-information'
+        iconPath='/modal-information-icon.svg'
+        message='Activity berhasil dihapus'
+        isShowAlert={isShowAlert}
+        setIsShowAlert={setIsShowAlert}
+      />
     </div>
   )
 }

@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import { truncate } from '../utils/formatter'
 
 interface activityItemProps {
   title: string
@@ -16,7 +15,7 @@ export default function ActivityItem(props: activityItemProps) {
       <h1 data-cy='activity-item-title' onClick={onClickTitle} className='activity-item-title'>
         {title}
       </h1>
-      <div className='flex justify-between mt-auto'>
+      <div className='flex justify-between mt-auto items-center'>
         <p data-cy='activity-item-date' className='activity-item-date'>
           {createdAt}
         </p>
