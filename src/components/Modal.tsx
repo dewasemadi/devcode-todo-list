@@ -36,7 +36,7 @@ export default function Modal(props: modalProps) {
               <div data-cy='modal-delete-title'>
                 <p className='text-black text-lg leading-relaxed text-center'>{title}</p>
                 <p className='text-black text-lg leading-relaxed font-bold text-center'>
-                  "{description}"
+                  &quot;{description}&quot;
                 </p>
               </div>
 

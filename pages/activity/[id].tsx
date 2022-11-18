@@ -254,6 +254,7 @@ export default function Activity() {
     if (!router.isReady) return
     const id = parseInt(router.query.id as string, 10)
     setId(id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.activity, router.isReady])
 
   return (
