@@ -41,6 +41,10 @@ export default function AddTodo(props: addTodoProps) {
     setPreviewSelectedColor(selected?.color)
   }, [selectedPriority])
 
+  useEffect(() => {
+    setIsOpen(false)
+  }, [isShowModal])
+
   return (
     <Show when={isShowModal}>
       <div data-cy='modal-add' className='floating-container' onClick={() => setIsShowModal(false)}>
@@ -114,7 +118,7 @@ export default function AddTodo(props: addTodoProps) {
                       data-cy='modal-add-priority-dropdown'
                       className='absolute w-52 max-sm:w-full dropdown-list-container'
                     >
-                      <ul className='divide-primary relative divide-y rounded-md bg-white border-gray-300 mt-0 flex flex-col rounded-t-none border border-t-0'>
+                      <ul className='z-50 divide-primary relative divide-y rounded-md bg-white border-gray-300 mt-0 flex flex-col rounded-t-none border border-t-0'>
                         {priorityOptions.map((option, idx) => (
                           <li
                             key={idx}
