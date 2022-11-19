@@ -7,7 +7,6 @@ interface TOption {
   color: string
   title: string
   value: string
-  dataCy: string
 }
 
 interface addTodoProps {
@@ -124,7 +123,7 @@ export default function AddAndEditTodo(props: addTodoProps) {
                         {priorityOptions.map((option, idx) => (
                           <li
                             key={idx}
-                            data-cy={option.dataCy}
+                            data-cy='modal-add-priority-item'
                             onClick={() => {
                               setSelectedPriority(option.value)
                               setIsOpen(false)

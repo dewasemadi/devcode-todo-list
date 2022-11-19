@@ -21,16 +21,11 @@ interface baseProps {
 }
 
 const priorityOptions = [
-  {
-    color: '#ed4c5c',
-    title: 'Very High',
-    value: 'very-high',
-    dataCy: 'modal-add-priority-very-high',
-  },
-  { color: '#ffce31', title: 'High', value: 'high', dataCy: 'modal-add-priority-high' },
-  { color: '#00A790', title: 'Normal', value: 'normal', dataCy: 'modal-add-priority-normal' },
-  { color: '#43c4e3', title: 'Low', value: 'low', dataCy: 'modal-add-priority-low' },
-  { color: '#b01aff', title: 'Very Low', value: 'very-low', dataCy: 'modal-add-priority-very-low' },
+  { color: '#ed4c5c', title: 'Very High', value: 'very-high' },
+  { color: '#ffce31', title: 'High', value: 'high' },
+  { color: '#00A790', title: 'Normal', value: 'normal' },
+  { color: '#43c4e3', title: 'Low', value: 'low' },
+  { color: '#b01aff', title: 'Very Low', value: 'very-low' },
 ]
 
 function TitleAndAction({ data }: baseProps) {
