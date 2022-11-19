@@ -76,7 +76,7 @@ export default function AddAndEditTodo(props: addTodoProps) {
                   value={addTitle}
                   onChange={(e) => onAddTitleChange(e)}
                   type='text'
-                  placeholder='Tambahkan nama List Item'
+                  placeholder='Tambahkan nama list item'
                   className='mt-2 h-12 w-full p-2 bg-inherit border-x border-y border-solid border-gray-300 rounded-md text-md text-black focus:outline-none focus:border-blue-300'
                 />
               </div>

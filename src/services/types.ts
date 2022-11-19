@@ -4,7 +4,7 @@
 
 export interface TCreateActivity {
   title: string
-  email: string
+  email?: string
 }
 
 export interface TUpdateActivity {
