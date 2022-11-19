@@ -45,6 +45,7 @@ a {
     @apply base-button;
   }
 
+  .base-button:disabled,
   .add-button:disabled {
     @apply cursor-not-allowed text-white;
     opacity: 0.2;
