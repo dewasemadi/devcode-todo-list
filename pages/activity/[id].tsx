@@ -20,9 +20,23 @@ interface baseProps {
   isLoading: boolean
 }
 
+const priorityOptions = [
+  {
+    color: '#ed4c5c',
+    title: 'Very High',
+    value: 'very-high',
+    dataCy: 'modal-add-priority-very-high',
+  },
+  { color: '#ffce31', title: 'High', value: 'high', dataCy: 'modal-add-priority-high' },
+  { color: '#00A790', title: 'Normal', value: 'normal', dataCy: 'modal-add-priority-normal' },
+  { color: '#43c4e3', title: 'Low', value: 'low', dataCy: 'modal-add-priority-low' },
+  { color: '#b01aff', title: 'Very Low', value: 'very-low', dataCy: 'modal-add-priority-very-low' },
+]
+
 function TitleAndAction({ data }: baseProps) {
-  const [title, setTitle] = useState('')
+  const [todoTitle, setTodoTitle] = useState('')
   const [addTitle, setAddTitle] = useState('')
+  const [selectedPriority, setSelectedPriority] = useState<any>('very-high')
   const [isShowModal, setIsShowModal] = useState(false)
   const [isEditTitle, setIsEditTitle] = useState(false)
   const router = useRouter()
@@ -31,13 +45,13 @@ function TitleAndAction({ data }: baseProps) {
   const todoMutation = useMutation(createTodo)
 
   useEffect(() => {
-    setTitle(data?.title)
+    setTodoTitle(data?.title)
   }, [data])
 
   const updateData = () => {
     const body: TUpdateActivity = {
       id: data?.id,
-      title: title,
+      title: todoTitle,
     }
     activityMutation.mutate(body, {
       onSuccess: () => {
@@ -58,16 +72,22 @@ function TitleAndAction({ data }: baseProps) {
     alert('sort')
   }
 
-  const onClickAdd = () => {
+  const onShowModal = () => {
     setIsShowModal(true)
+    setAddTitle('')
+    setSelectedPriority('very-high')
+  }
+
+  const onClickConfirm = () => {
     const body: TCreateTodo = {
-      title: 'New Todo',
+      title: addTitle,
       activity_group_id: data?.id,
-      priority: 'very-high',
+      priority: selectedPriority,
     }
     todoMutation.mutate(body, {
       onSuccess: () => {
         queryClient.invalidateQueries('todo')
+        setIsShowModal(false)
       },
     })
   }
@@ -85,9 +105,14 @@ function TitleAndAction({ data }: baseProps) {
     updateData()
   }
 
-  const onChange = (e: any) => {
+  const onTodoTitleChange = (e: any) => {
     e.preventDefault()
-    setTitle(e.target.value)
+    setTodoTitle(e.target.value)
+  }
+
+  const onAddTitleChange = (e: any) => {
+    e.preventDefault()
+    setAddTitle(e.target.value)
   }
 
   return (
@@ -100,9 +125,9 @@ function TitleAndAction({ data }: baseProps) {
           <input
             autoFocus
             type='text'
-            value={title}
+            value={todoTitle}
             onBlur={onBlur}
-            onChange={onChange}
+            onChange={onTodoTitleChange}
             onKeyDown={onKeyDown}
             style={{ lineHeight: 'inherit' }}
             className='border-b border-gray-400 bg-transparent text-3xl font-bold outline-none'
@@ -115,7 +140,7 @@ function TitleAndAction({ data }: baseProps) {
             className='text-3xl font-bold'
             style={{ lineHeight: 'unset' }}
           >
-            {truncate(title, 30)}
+            {truncate(todoTitle, 30)}
           </h1>
           <Button dataCy='todo-title-edit-button' onClick={onClickEdit} type='icon'>
             <Image src='/edit-icon.svg' width={18} height={18} alt='todo-back-button' />
@@ -135,10 +160,21 @@ function TitleAndAction({ data }: baseProps) {
             </Button>
           </div>
         </Show>
-        <Button dataCy='todo-add-button' onClick={onClickAdd} type='add' />
+        <Button dataCy='todo-add-button' onClick={onShowModal} type='add' />
       </div>
       {/* modal */}
-      <AddTodo isShowModal={isShowModal} setIsShowModal={setIsShowModal} />
+      <AddTodo
+        modalTitle='Tambah List Item'
+        addTitle={addTitle}
+        confirmText='Simpan'
+        isShowModal={isShowModal}
+        onAddTitleChange={onAddTitleChange}
+        setIsShowModal={setIsShowModal}
+        selectedPriority={selectedPriority}
+        setSelectedPriority={setSelectedPriority}
+        priorityOptions={priorityOptions}
+        onClickConfirm={onClickConfirm}
+      />
     </div>
   )
 }

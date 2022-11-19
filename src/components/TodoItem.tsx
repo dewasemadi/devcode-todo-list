@@ -4,7 +4,7 @@ interface todoItemProps {
   dataCy: string
   title: string
   isActive: boolean
-  priority: 'very-high' | 'high' | 'medium' | 'low' | 'very-low'
+  priority: 'very-high' | 'high' | 'normal' | 'low' | 'very-low'
   onClickEdit: () => void
   onClickDelete: () => void
   onCheckboxChange: () => void
@@ -19,8 +19,8 @@ export default function TodoItem(props: todoItemProps) {
         return 'priority-very-high'
       case 'high':
         return 'priority-high'
-      case 'medium':
-        return 'priority-medium'
+      case 'normal':
+        return 'priority-normal'
       case 'low':
         return 'priority-low'
       case 'very-low':

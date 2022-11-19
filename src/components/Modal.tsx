@@ -19,10 +19,10 @@ export default function Modal(props: modalProps) {
   return (
     <Show when={isShowModal}>
       <div data-cy={dataCy} className='floating-container' onClick={() => setIsShowModal(false)}>
-        <div className='relative' onClick={(e) => e.stopPropagation()}>
+        <div className='relative container max-w-2xl' onClick={(e) => e.stopPropagation()}>
           {/*content*/}
           <div className='border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none'>
-            <div className='flex px-16 py-10 flex-col gap-10'>
+            <div className='flex px-16 py-10 flex-col gap-10 max-sm:px-8 max-sm:py-10'>
               {/* icon */}
               <Image
                 data-cy='modal-delete-icon'
@@ -42,7 +42,7 @@ export default function Modal(props: modalProps) {
               </div>
 
               {/*action*/}
-              <div className='flex gap-5 justify-center'>
+              <div className='flex gap-5 justify-center max-sm:flex-col-reverse'>
                 <Button
                   dataCy='modal-delete-cancel-button'
                   type='cancel'

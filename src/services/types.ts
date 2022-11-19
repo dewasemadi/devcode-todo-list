@@ -15,13 +15,13 @@ export interface TUpdateActivity {
 export interface TCreateTodo {
   title: string
   activity_group_id: number
-  priority: 'very-high' | 'high' | 'medium' | 'low' | 'very-low'
+  priority: 'very-high' | 'high' | 'normal' | 'low' | 'very-low'
 }
 
 export interface TUpdateTodo {
   id: number
   is_active: boolean
-  priority: 'very-high' | 'high' | 'medium' | 'low' | 'very-low'
+  priority: 'very-high' | 'high' | 'normal' | 'low' | 'very-low'
 }
 
 /**

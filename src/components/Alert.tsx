@@ -16,7 +16,7 @@ export default function Alert(props: alertProps) {
   return (
     <Show when={isShowAlert}>
       <div data-cy={dataCy} className='floating-container' onClick={() => setIsShowAlert(false)}>
-        <div className='relative' onClick={(e) => e.stopPropagation()}>
+        <div className='relative container max-w-xl' onClick={(e) => e.stopPropagation()}>
           {/* content */}
           <div className='alert-container'>
             <Image
