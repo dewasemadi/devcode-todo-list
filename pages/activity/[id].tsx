@@ -13,6 +13,7 @@ import { createTodo, deleteTodo, updateTodo } from '../../src/services/todoServi
 import { TUpdateActivity, TCreateTodo, TGetAllTodo, TUpdateTodo } from '../../src/services/types'
 import { getActivity, updateActivity } from '../../src/services/activityService'
 import TodoItem from '../../src/components/TodoItem'
+import AddTodo from '../../src/components/AddTodo'
 
 interface baseProps {
   data: any
@@ -21,6 +22,8 @@ interface baseProps {
 
 function TitleAndAction({ data }: baseProps) {
   const [title, setTitle] = useState('')
+  const [addTitle, setAddTitle] = useState('')
+  const [isShowModal, setIsShowModal] = useState(false)
   const [isEditTitle, setIsEditTitle] = useState(false)
   const router = useRouter()
   const queryClient = useQueryClient()
@@ -56,6 +59,7 @@ function TitleAndAction({ data }: baseProps) {
   }
 
   const onClickAdd = () => {
+    setIsShowModal(true)
     const body: TCreateTodo = {
       title: 'New Todo',
       activity_group_id: data?.id,
@@ -133,6 +137,8 @@ function TitleAndAction({ data }: baseProps) {
         </Show>
         <Button dataCy='todo-add-button' onClick={onClickAdd} type='add' />
       </div>
+      {/* modal */}
+      <AddTodo isShowModal={isShowModal} setIsShowModal={setIsShowModal} />
     </div>
   )
 }
@@ -211,6 +217,7 @@ function Content({ data, isLoading }: baseProps) {
         <div className='grid gap-3'>
           {data?.todo_items.map((data: TGetAllTodo, idx: number) => (
             <TodoItem
+              dataCy='todo-item'
               key={idx}
               title={data?.title}
               priority={data?.priority}
@@ -223,7 +230,7 @@ function Content({ data, isLoading }: baseProps) {
         </div>
       </Show>
       <Modal
-        data-cy='modal-delete'
+        dataCy='modal-delete'
         isShowModal={isShowModal}
         iconPath='/modal-delete-icon.svg'
         title='Apakah anda yakin menghapus list item'
@@ -232,7 +239,7 @@ function Content({ data, isLoading }: baseProps) {
         onClickConfirm={() => onClickDelete()}
       />
       <Alert
-        data-cy='modal-information'
+        dataCy='modal-information'
         iconPath='/modal-information-icon.svg'
         message='Todo berhasil dihapus'
         isShowAlert={isShowAlert}

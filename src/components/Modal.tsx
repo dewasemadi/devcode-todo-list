@@ -3,6 +3,7 @@ import Button from './Button'
 import Show from './Show'
 
 interface modalProps {
+  dataCy: string
   iconPath: string
   title: string
   description?: string
@@ -12,12 +13,12 @@ interface modalProps {
 }
 
 export default function Modal(props: modalProps) {
-  const { iconPath, title, description, isShowModal } = props
+  const { dataCy, iconPath, title, description, isShowModal } = props
   const { onClickConfirm, setIsShowModal } = props
 
   return (
     <Show when={isShowModal}>
-      <div className='floating-container' onClick={() => setIsShowModal(false)}>
+      <div data-cy={dataCy} className='floating-container' onClick={() => setIsShowModal(false)}>
         <div className='relative' onClick={(e) => e.stopPropagation()}>
           {/*content*/}
           <div className='border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none'>

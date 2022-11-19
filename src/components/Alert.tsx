@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Show from './Show'
 
 interface alertProps {
+  dataCy: string
   type?: 'success' | 'error'
   iconPath: string
   isShowAlert: boolean
@@ -10,11 +11,11 @@ interface alertProps {
 }
 
 export default function Alert(props: alertProps) {
-  const { type = 'success', iconPath, message, isShowAlert, setIsShowAlert } = props
+  const { dataCy, type = 'success', iconPath, message, isShowAlert, setIsShowAlert } = props
 
   return (
     <Show when={isShowAlert}>
-      <div className='floating-container' onClick={() => setIsShowAlert(false)}>
+      <div data-cy={dataCy} className='floating-container' onClick={() => setIsShowAlert(false)}>
         <div className='relative' onClick={(e) => e.stopPropagation()}>
           {/* content */}
           <div className='alert-container'>

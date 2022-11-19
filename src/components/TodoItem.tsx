@@ -1,6 +1,7 @@
 import Image from 'next/image'
 
 interface todoItemProps {
+  dataCy: string
   title: string
   isActive: boolean
   priority: 'very-high' | 'high' | 'medium' | 'low' | 'very-low'
@@ -10,7 +11,7 @@ interface todoItemProps {
 }
 
 export default function TodoItem(props: todoItemProps) {
-  const { title, isActive, priority, onClickEdit, onClickDelete, onCheckboxChange } = props
+  const { dataCy, title, isActive, priority, onClickEdit, onClickDelete, onCheckboxChange } = props
 
   const getPriorityColor = () => {
     switch (priority) {
@@ -32,7 +33,7 @@ export default function TodoItem(props: todoItemProps) {
   }
 
   return (
-    <div className='todo-item-container'>
+    <div data-cy={dataCy} className='todo-item-container'>
       <div className='flex items-center gap-6'>
         {/* checkbox */}
         <input

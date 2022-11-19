@@ -88,6 +88,7 @@ function Content() {
         <div className='grid gap-6 sm:grid-cols-2 md:grid-cols-4'>
           {data?.data.map((data: TGetActivities, idx: number) => (
             <ActivityItem
+              dataCy='activity-item'
               key={idx}
               title={data?.title}
               createdAt={formatDate(data?.created_at)}
@@ -98,7 +99,7 @@ function Content() {
         </div>
       </Show>
       <Modal
-        data-cy='modal-delete'
+        dataCy='modal-delete'
         isShowModal={isShowModal}
         iconPath='/modal-delete-icon.svg'
         title='Apakah anda yakin menghapus activity'
@@ -107,7 +108,7 @@ function Content() {
         onClickConfirm={() => onClickDelete()}
       />
       <Alert
-        data-cy='modal-information'
+        dataCy='modal-information'
         iconPath='/modal-information-icon.svg'
         message='Activity berhasil dihapus'
         isShowAlert={isShowAlert}
