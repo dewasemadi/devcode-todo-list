@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import Button from './Button'
+import OutsideWrapper from './OutsideWrapper'
 import Show from './Show'
 
 interface TOption {
@@ -77,7 +78,7 @@ export default function AddAndEditTodo(props: addTodoProps) {
                   onChange={(e) => onAddTitleChange(e)}
                   type='text'
                   placeholder='Tambahkan nama list item'
-                  className='mt-2 h-12 w-full p-2 bg-inherit border-x border-y border-solid border-gray-300 rounded-md text-md text-black focus:outline-none focus:border-blue-300'
+                  className='mt-2 h-12 w-full py-2 px-3 bg-inherit border-x border-y border-solid border-gray-300 rounded-md text-md text-black focus:outline-none focus:border-blue-300'
                 />
               </div>
 
@@ -87,69 +88,71 @@ export default function AddAndEditTodo(props: addTodoProps) {
                 </h6>
                 <div className='mt-2'>
                   {/* dropdown */}
-                  <button
-                    onClick={onClickPriority}
-                    data-cy='modal-add-priority-dropdown'
-                    className={isOpen ? 'button-dropdown-open' : 'button-dropdown'}
-                  >
+                  <OutsideWrapper callback={() => setIsOpen(false)}>
+                    <button
+                      onClick={onClickPriority}
+                      data-cy='modal-add-priority-dropdown'
+                      className={isOpen ? 'button-dropdown-open' : 'button-dropdown'}
+                    >
+                      <Show when={isOpen}>
+                        <div className='flex gap-2 justify-center items-center'>
+                          <span>Pilih priority</span>
+                        </div>
+                      </Show>
+                      <Show when={!isOpen}>
+                        <div className='flex gap-2 justify-center items-center'>
+                          <div
+                            className='w-3 h-3 rounded-full'
+                            style={{ background: previewSelectedColor }}
+                          ></div>
+                          <span>{previewSelectedTitle}</span>
+                        </div>
+                      </Show>
+                      <Image
+                        width={15}
+                        height={15}
+                        alt={modalTitle}
+                        src={isOpen ? '/chevron-up-icon.svg' : '/chevron-down-icon.svg'}
+                      />
+                    </button>
+                    {/* dropdown list */}
                     <Show when={isOpen}>
-                      <div className='flex gap-2 justify-center items-center'>
-                        <span>Pilih priority</span>
+                      <div className='absolute w-52 max-sm:w-full dropdown-list-container'>
+                        <ul
+                          data-cy='modal-add-priority-dropdown'
+                          className='z-50 divide-primary relative divide-y rounded-md bg-white border-gray-300 mt-0 flex flex-col rounded-t-none border border-t-0'
+                        >
+                          {priorityOptions.map((option, idx) => (
+                            <li
+                              key={idx}
+                              data-cy='modal-add-priority-item'
+                              onClick={() => {
+                                setSelectedPriority(option.value)
+                                setIsOpen(false)
+                              }}
+                              className='h-12 px-3 py-2 flex cursor-pointer justify-between items-center border-gray-300 hover:bg-slate-100'
+                            >
+                              <div className='flex gap-4 items-center'>
+                                <div
+                                  className='w-3 h-3 rounded-full'
+                                  style={{ background: option.color }}
+                                ></div>
+                                <p>{option.title}</p>
+                              </div>
+                              <Show when={option.value === selectedPriority}>
+                                <Image
+                                  src='/check-icon.svg'
+                                  width={15}
+                                  height={15}
+                                  alt='check icon'
+                                />
+                              </Show>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     </Show>
-                    <Show when={!isOpen}>
-                      <div className='flex gap-2 justify-center items-center'>
-                        <div
-                          className='w-3 h-3 rounded-full'
-                          style={{ background: previewSelectedColor }}
-                        ></div>
-                        <span>{previewSelectedTitle}</span>
-                      </div>
-                    </Show>
-                    <Image
-                      width={15}
-                      height={15}
-                      alt={modalTitle}
-                      src={isOpen ? '/chevron-up-icon.svg' : '/chevron-down-icon.svg'}
-                    />
-                  </button>
-                  {/* dropdown list */}
-                  <Show when={isOpen}>
-                    <div className='absolute w-52 max-sm:w-full dropdown-list-container'>
-                      <ul
-                        data-cy='modal-add-priority-dropdown'
-                        className='z-50 divide-primary relative divide-y rounded-md bg-white border-gray-300 mt-0 flex flex-col rounded-t-none border border-t-0'
-                      >
-                        {priorityOptions.map((option, idx) => (
-                          <li
-                            key={idx}
-                            data-cy='modal-add-priority-item'
-                            onClick={() => {
-                              setSelectedPriority(option.value)
-                              setIsOpen(false)
-                            }}
-                            className='h-12 px-3 py-2 flex cursor-pointer justify-between items-center border-gray-300'
-                          >
-                            <div className='flex gap-4 items-center'>
-                              <div
-                                className='w-3 h-3 rounded-full'
-                                style={{ background: option.color }}
-                              ></div>
-                              <p>{option.title}</p>
-                            </div>
-                            <Show when={option.value === selectedPriority}>
-                              <Image
-                                src='/check-icon.svg'
-                                width={15}
-                                height={15}
-                                alt='check icon'
-                              />
-                            </Show>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </Show>
+                  </OutsideWrapper>
                 </div>
               </div>
             </div>

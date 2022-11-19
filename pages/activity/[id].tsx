@@ -8,12 +8,13 @@ import Layout from '../../src/components/Layout'
 import Button from '../../src/components/Button'
 import Spinner from '../../src/components/Spinner'
 import { truncate } from '../../src/utils/formatter'
+import TodoItem from '../../src/components/TodoItem'
+import SortTodo from '../../src/components/SortTodo'
+import AddAndEditTodo from '../../src/components/AddAndEditTodo'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { getActivity, updateActivity } from '../../src/services/activityService'
 import { createTodo, deleteTodo, updateTodo } from '../../src/services/todoService'
 import { TUpdateActivity, TCreateTodo, TGetAllTodo, TUpdateTodo } from '../../src/services/types'
-import { getActivity, updateActivity } from '../../src/services/activityService'
-import TodoItem from '../../src/components/TodoItem'
-import AddAndEditTodo from '../../src/components/AddAndEditTodo'
 
 interface baseProps {
   data: any
@@ -23,17 +24,27 @@ interface baseProps {
 const priorityOptions = [
   { color: '#ed4c5c', title: 'Very High', value: 'very-high' },
   { color: '#ffce31', title: 'High', value: 'high' },
-  { color: '#00A790', title: 'Normal', value: 'normal' },
-  { color: '#43c4e3', title: 'Low', value: 'low' },
+  { color: '#00a790', title: 'Normal', value: 'normal' },
+  { color: '#428bc1', title: 'Low', value: 'low' },
   { color: '#b01aff', title: 'Very Low', value: 'very-low' },
+]
+
+const sortOptions = [
+  { icon: '/sort-latest-icon.svg', title: 'Terbaru', value: 'latest' },
+  { icon: '/sort-oldest-icon.svg', title: 'Terlama', value: 'oldest' },
+  { icon: '/sort-az-icon.svg', title: 'A-Z', value: 'ascending' },
+  { icon: '/sort-za-icon.svg', title: 'Z-A', value: 'descending' },
+  { icon: '/sort-unfinished-icon.svg', title: 'Belum Selesai', value: 'unfinished' },
 ]
 
 function TitleAndAction({ data }: baseProps) {
   const [todoTitle, setTodoTitle] = useState('')
   const [addTitle, setAddTitle] = useState('')
   const [selectedPriority, setSelectedPriority] = useState<any>('very-high')
+  const [selectedSort, setSelectedSort] = useState<any>('latest')
   const [isShowModal, setIsShowModal] = useState(false)
   const [isEditTitle, setIsEditTitle] = useState(false)
+  const [isShowSortTodo, setIsShowSortTodo] = useState(false)
   const router = useRouter()
   const queryClient = useQueryClient()
   const activityMutation = useMutation(updateActivity)
@@ -64,7 +75,7 @@ function TitleAndAction({ data }: baseProps) {
   }
 
   const onClickSort = () => {
-    alert('sort')
+    setIsShowSortTodo(!isShowSortTodo)
   }
 
   const onShowModal = () => {
@@ -154,6 +165,14 @@ function TitleAndAction({ data }: baseProps) {
               <Image src='/sort-icon.svg' width={20} height={20} alt='todo-back-button' />
             </Button>
           </div>
+          {/* sort dropdown */}
+          <SortTodo
+            isShowDropdown={isShowSortTodo}
+            sortOptions={sortOptions}
+            selectedSort={selectedSort}
+            setSelectedSort={setSelectedSort}
+            setIsShowSortTodo={setIsShowSortTodo}
+          />
         </Show>
         <Button dataCy='todo-add-button' onClick={onShowModal} type='add' />
       </div>
