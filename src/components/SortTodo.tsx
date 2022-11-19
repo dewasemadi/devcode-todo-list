@@ -11,7 +11,7 @@ interface TOption {
 interface sortTodoProps {
   isShowDropdown: boolean
   sortOptions: Array<TOption>
-  selectedSort: 'latest' | 'oldest' | 'ascending' | 'descending' | 'unfinished'
+  selectedSort: 'sort-latest' | 'sort-oldest' | 'sort-az' | 'sort-za' | 'sort-unfinished'
   setSelectedSort: (value: string) => void
   setIsShowSortTodo: (value: boolean) => void
 }
@@ -24,13 +24,13 @@ export default function SortTodo(props: sortTodoProps) {
       <div className='absolute w-60 dropdown-sort-container rounded-md'>
         <OutsideWrapper callback={() => setIsShowSortTodo(false)}>
           <ul
-            data-cy='modal-add-priority-dropdown'
+            data-cy='sort'
             className='z-50 divide-primary relative divide-y rounded-md bg-white border-gray-300 mt-0 flex flex-col border'
           >
             {sortOptions.map((option, idx) => (
               <li
+                data-cy={option.value}
                 key={idx}
-                data-cy='modal-add-priority-item'
                 onClick={() => {
                   setSelectedSort(option.value)
                   setIsShowSortTodo(false)

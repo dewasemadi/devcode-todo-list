@@ -23,25 +23,25 @@ interface baseProps {
 
 const priorityOptions = [
   { color: '#ed4c5c', title: 'Very High', value: 'very-high' },
-  { color: '#ffce31', title: 'High', value: 'high' },
+  { color: '#f8a541', title: 'High', value: 'high' },
   { color: '#00a790', title: 'Normal', value: 'normal' },
   { color: '#428bc1', title: 'Low', value: 'low' },
-  { color: '#b01aff', title: 'Very Low', value: 'very-low' },
+  { color: '#8942c1', title: 'Very Low', value: 'very-low' },
 ]
 
 const sortOptions = [
-  { icon: '/sort-latest-icon.svg', title: 'Terbaru', value: 'latest' },
-  { icon: '/sort-oldest-icon.svg', title: 'Terlama', value: 'oldest' },
-  { icon: '/sort-az-icon.svg', title: 'A-Z', value: 'ascending' },
-  { icon: '/sort-za-icon.svg', title: 'Z-A', value: 'descending' },
-  { icon: '/sort-unfinished-icon.svg', title: 'Belum Selesai', value: 'unfinished' },
+  { icon: '/sort-latest-icon.svg', title: 'Terbaru', value: 'sort-latest' },
+  { icon: '/sort-oldest-icon.svg', title: 'Terlama', value: 'sort-oldest' },
+  { icon: '/sort-az-icon.svg', title: 'A-Z', value: 'sort-az' },
+  { icon: '/sort-za-icon.svg', title: 'Z-A', value: 'sort-za' },
+  { icon: '/sort-unfinished-icon.svg', title: 'Belum Selesai', value: 'sort-unfinished' },
 ]
 
 function TitleAndAction({ data }: baseProps) {
   const [todoTitle, setTodoTitle] = useState('')
   const [addTitle, setAddTitle] = useState('')
   const [selectedPriority, setSelectedPriority] = useState<any>('very-high')
-  const [selectedSort, setSelectedSort] = useState<any>('latest')
+  const [selectedSort, setSelectedSort] = useState<any>('sort-latest')
   const [isShowModal, setIsShowModal] = useState(false)
   const [isEditTitle, setIsEditTitle] = useState(false)
   const [isShowSortTodo, setIsShowSortTodo] = useState(false)
@@ -157,12 +157,12 @@ function TitleAndAction({ data }: baseProps) {
         <Show when={data && data?.todo_items.length !== 0}>
           <div className='sort-container'>
             <Button
-              dataCy='todo-title-edit-button'
+              dataCy='todo-sort-button'
               onClick={onClickSort}
               type='icon'
               className='w-12 h-12'
             >
-              <Image src='/sort-icon.svg' width={20} height={20} alt='todo-back-button' />
+              <Image src='/sort-icon.svg' width={20} height={20} alt='todo-sort-button' />
             </Button>
           </div>
           {/* sort dropdown */}
