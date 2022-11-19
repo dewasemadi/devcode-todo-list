@@ -15,10 +15,16 @@ import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { getActivity, updateActivity } from '../../src/services/activityService'
 import { createTodo, deleteTodo, updateTodo } from '../../src/services/todoService'
 import { TUpdateActivity, TCreateTodo, TGetAllTodo, TUpdateTodo } from '../../src/services/types'
+import { sort } from '../../src/utils/sort'
 
 interface baseProps {
   data: any
   isLoading: boolean
+}
+
+interface titleAndActionProps extends baseProps {
+  selectedSort: 'sort-latest' | 'sort-oldest' | 'sort-az' | 'sort-za' | 'sort-unfinished'
+  setSelectedSort: (value: string) => void
 }
 
 const priorityOptions = [
@@ -37,11 +43,10 @@ const sortOptions = [
   { icon: '/sort-unfinished-icon.svg', title: 'Belum Selesai', value: 'sort-unfinished' },
 ]
 
-function TitleAndAction({ data }: baseProps) {
+function TitleAndAction({ data, selectedSort, setSelectedSort }: titleAndActionProps) {
   const [todoTitle, setTodoTitle] = useState('')
   const [addTitle, setAddTitle] = useState('')
   const [selectedPriority, setSelectedPriority] = useState<any>('very-high')
-  const [selectedSort, setSelectedSort] = useState<any>('sort-latest')
   const [isShowModal, setIsShowModal] = useState(false)
   const [isEditTitle, setIsEditTitle] = useState(false)
   const [isShowSortTodo, setIsShowSortTodo] = useState(false)
@@ -193,9 +198,14 @@ function TitleAndAction({ data }: baseProps) {
   )
 }
 
-function Content({ data, isLoading }: baseProps) {
+interface contentProps extends baseProps {
+  selectedSort: string
+}
+
+function Content({ data, isLoading, selectedSort }: contentProps) {
   const isTodoEmpty = data && data?.todo_items.length === 0
   const queryClient = useQueryClient()
+  const [unsortedData, setUnsortedData] = useState(data?.todo_items)
   const [isShowDeleteModal, setIsShowDeleteModal] = useState(false)
   const [isShowEditModal, setIsShowEditModal] = useState(false)
   const [isShowDeleteAlert, setIsShowDeleteAlert] = useState(false)
@@ -207,12 +217,25 @@ function Content({ data, isLoading }: baseProps) {
   const updateTodoMutation = useMutation(updateTodo)
   const deleteTodoMutation = useMutation(deleteTodo)
 
+  useEffect(() => {
+    const sorted = sort(unsortedData, selectedSort)
+    setUnsortedData(sorted)
+  }, [selectedSort])
+
+  useEffect(() => {
+    if (data) {
+      const sorted = sort(data?.todo_items, selectedSort)
+      setUnsortedData(sorted)
+    }
+  }, [data?.todo_items])
+
   const onCheckboxChange = (data: TGetAllTodo) => {
     const body: TUpdateTodo = {
       id: data?.id,
       is_active: !data?.is_active,
       priority: data?.priority,
     }
+
     updateTodoMutation.mutate(body, {
       onSuccess: () => {
         queryClient.invalidateQueries('todo')
@@ -237,6 +260,7 @@ function Content({ data, isLoading }: baseProps) {
       onSuccess: () => {
         queryClient.invalidateQueries('todo')
         setIsShowEditModal(false)
+        setUnsortedData(data?.todo_items)
       },
     })
   }
@@ -282,7 +306,7 @@ function Content({ data, isLoading }: baseProps) {
       </Show>
       <Show when={!isTodoEmpty}>
         <div className='grid gap-3'>
-          {data?.todo_items.map((data: TGetAllTodo, idx: number) => (
+          {unsortedData.map((data: TGetAllTodo, idx: number) => (
             <TodoItem
               dataCy='todo-item'
               key={idx}
@@ -332,8 +356,9 @@ function Content({ data, isLoading }: baseProps) {
 export default function Activity() {
   const router = useRouter()
   const [id, setId] = useState(-1)
+  const [selectedSort, setSelectedSort] = useState<any>('sort-latest')
 
-  const { data, isLoading, isError } = useQuery('todo', () => getActivity(id), {
+  const { data, isLoading } = useQuery('todo', () => getActivity(id), {
     enabled: id !== -1,
   })
 
@@ -346,8 +371,15 @@ export default function Activity() {
 
   return (
     <Layout
-      titleAndAction={<TitleAndAction data={data} isLoading={isLoading} />}
-      content={<Content data={data} isLoading={isLoading} />}
+      titleAndAction={
+        <TitleAndAction
+          data={data}
+          isLoading={isLoading}
+          selectedSort={selectedSort}
+          setSelectedSort={setSelectedSort}
+        />
+      }
+      content={<Content data={data} isLoading={isLoading} selectedSort={selectedSort} />}
     />
   )
 }
