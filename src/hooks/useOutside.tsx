@@ -15,5 +15,6 @@ export const useOutside = (ref: React.RefObject<HTMLElement>, callback: () => vo
       // unbind the event listener on clean up
       document.removeEventListener('mousedown', onClickOutside)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref])
 }

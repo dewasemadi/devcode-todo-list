@@ -220,6 +220,7 @@ function Content({ data, isLoading, selectedSort }: contentProps) {
   useEffect(() => {
     const sorted = sort(unsortedData, selectedSort)
     setUnsortedData(sorted)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedSort])
 
   useEffect(() => {
@@ -227,6 +228,7 @@ function Content({ data, isLoading, selectedSort }: contentProps) {
       const sorted = sort(data?.todo_items, selectedSort)
       setUnsortedData(sorted)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.todo_items])
 
   const onCheckboxChange = (data: TGetAllTodo) => {
@@ -306,7 +308,7 @@ function Content({ data, isLoading, selectedSort }: contentProps) {
       </Show>
       <Show when={!isTodoEmpty}>
         <div className='grid gap-3'>
-          {unsortedData.map((data: TGetAllTodo, idx: number) => (
+          {unsortedData?.map((data: TGetAllTodo, idx: number) => (
             <TodoItem
               dataCy='todo-item'
               key={idx}

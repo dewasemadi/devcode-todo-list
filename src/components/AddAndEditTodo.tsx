@@ -36,14 +36,15 @@ export default function AddAndEditTodo(props: addTodoProps) {
   }
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const selected = priorityOptions.find((item) => item.value === selectedPriority)
     setPreviewSelectedTitle(selected?.title)
     setPreviewSelectedColor(selected?.color)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedPriority])
 
   useEffect(() => {
     setIsOpen(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isShowModal])
 
   return (
