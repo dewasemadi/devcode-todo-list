@@ -20,7 +20,7 @@ function TitleAndAction() {
   const onAddClicked = () => {
     const data: TCreateActivity = {
       title: 'New Activity',
-      email: 'dewasemadi@apps.ipb.ac.id',
+      email: process.env.EMAIL,
     }
     mutation.mutate(data, {
       onSuccess: () => {

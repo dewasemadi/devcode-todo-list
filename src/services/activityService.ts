@@ -2,7 +2,7 @@ import api from './api'
 import { TCreateActivity, TUpdateActivity } from './types'
 
 export const getActivities = async () =>
-  await api.get('/activity-groups', { params: { email: 'dewasemadi@apps.ipb.ac.id' } })
+  await api.get('/activity-groups', { params: { email: process.env.EMAIL } })
 
 export const getActivity = async (id: number) => await api.get(`/activity-groups/${id}`)
 
