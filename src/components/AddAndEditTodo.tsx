@@ -23,7 +23,7 @@ interface addTodoProps {
   onClickConfirm: () => void
 }
 
-export default function AddTodo(props: addTodoProps) {
+export default function AddAndEditTodo(props: addTodoProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [previewSelectedTitle, setPreviewSelectedTitle] = useState<string | undefined>('')
   const [previewSelectedColor, setPreviewSelectedColor] = useState<string | undefined>('')
@@ -36,6 +36,7 @@ export default function AddTodo(props: addTodoProps) {
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const selected = priorityOptions.find((item) => item.value === selectedPriority)
     setPreviewSelectedTitle(selected?.title)
     setPreviewSelectedColor(selected?.color)

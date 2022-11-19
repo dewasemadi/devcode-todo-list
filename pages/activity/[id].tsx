@@ -13,7 +13,7 @@ import { createTodo, deleteTodo, updateTodo } from '../../src/services/todoServi
 import { TUpdateActivity, TCreateTodo, TGetAllTodo, TUpdateTodo } from '../../src/services/types'
 import { getActivity, updateActivity } from '../../src/services/activityService'
 import TodoItem from '../../src/components/TodoItem'
-import AddTodo from '../../src/components/AddTodo'
+import AddAndEditTodo from '../../src/components/AddAndEditTodo'
 
 interface baseProps {
   data: any
@@ -163,7 +163,7 @@ function TitleAndAction({ data }: baseProps) {
         <Button dataCy='todo-add-button' onClick={onShowModal} type='add' />
       </div>
       {/* modal */}
-      <AddTodo
+      <AddAndEditTodo
         modalTitle='Tambah List Item'
         addTitle={addTitle}
         confirmText='Simpan'
@@ -182,8 +182,12 @@ function TitleAndAction({ data }: baseProps) {
 function Content({ data, isLoading }: baseProps) {
   const isTodoEmpty = data && data?.todo_items.length === 0
   const queryClient = useQueryClient()
-  const [isShowModal, setIsShowModal] = useState(false)
-  const [isShowAlert, setIsShowAlert] = useState(false)
+  const [isShowDeleteModal, setIsShowDeleteModal] = useState(false)
+  const [isShowEditModal, setIsShowEditModal] = useState(false)
+  const [isShowDeleteAlert, setIsShowDeleteAlert] = useState(false)
+  const [selectedTodoId, setSelectedTodoId] = useState(0)
+  const [selectedEditTitle, setSelectedEditTitle] = useState('')
+  const [selectedPriority, setSelectedPriority] = useState<any>('very-high')
   const [deleteId, setDeleteId] = useState(0)
   const [deleteTitle, setDeleteTitle] = useState('')
   const updateTodoMutation = useMutation(updateTodo)
@@ -202,15 +206,23 @@ function Content({ data, isLoading }: baseProps) {
     })
   }
 
-  const onClickEdit = (id: number) => {
-    const body: TUpdateTodo = {
-      id: id,
-      is_active: false,
-      priority: 'very-high',
+  const onClickEdit = (data: TGetAllTodo) => {
+    setIsShowEditModal(true)
+    setSelectedTodoId(data?.id)
+    setSelectedEditTitle(data?.title)
+    setSelectedPriority(data?.priority)
+  }
+
+  const onClickConfirm = () => {
+    const body = {
+      id: selectedTodoId,
+      title: selectedEditTitle,
+      priority: selectedPriority,
     }
     updateTodoMutation.mutate(body, {
       onSuccess: () => {
         queryClient.invalidateQueries('todo')
+        setIsShowEditModal(false)
       },
     })
   }
@@ -219,19 +231,24 @@ function Content({ data, isLoading }: baseProps) {
     deleteTodoMutation.mutate(deleteId, {
       onSuccess: () => {
         queryClient.invalidateQueries('todo')
-        setIsShowModal(false)
-        setIsShowAlert(true)
+        setIsShowDeleteModal(false)
+        setIsShowDeleteAlert(true)
         setTimeout(() => {
-          setIsShowAlert(false)
+          setIsShowDeleteAlert(false)
         }, 2000) // close alert after 2s
       },
     })
   }
 
+  const onSelectedEditTitleChange = (e: any) => {
+    e.preventDefault()
+    setSelectedEditTitle(e.target.value)
+  }
+
   const onShowModal = (id: number, title: string) => {
     setDeleteId(id)
     setDeleteTitle(title)
-    setIsShowModal(true)
+    setIsShowDeleteModal(true)
   }
 
   return (
@@ -259,7 +276,7 @@ function Content({ data, isLoading }: baseProps) {
               priority={data?.priority}
               isActive={data?.is_active}
               onCheckboxChange={() => onCheckboxChange(data)}
-              onClickEdit={() => onClickEdit(data?.id)}
+              onClickEdit={() => onClickEdit(data)}
               onClickDelete={() => onShowModal(data?.id, data?.title)}
             />
           ))}
@@ -267,19 +284,32 @@ function Content({ data, isLoading }: baseProps) {
       </Show>
       <Modal
         dataCy='modal-delete'
-        isShowModal={isShowModal}
+        isShowModal={isShowDeleteModal}
         iconPath='/modal-delete-icon.svg'
         title='Apakah anda yakin menghapus list item'
         description={deleteTitle}
-        setIsShowModal={setIsShowModal}
+        setIsShowModal={setIsShowDeleteModal}
         onClickConfirm={() => onClickDelete()}
       />
       <Alert
         dataCy='modal-information'
         iconPath='/modal-information-icon.svg'
         message='Todo berhasil dihapus'
-        isShowAlert={isShowAlert}
-        setIsShowAlert={setIsShowAlert}
+        isShowAlert={isShowDeleteAlert}
+        setIsShowAlert={setIsShowDeleteAlert}
+      />
+      {/* modal */}
+      <AddAndEditTodo
+        modalTitle='Edit Item'
+        addTitle={selectedEditTitle}
+        confirmText='Simpan'
+        isShowModal={isShowEditModal}
+        onAddTitleChange={onSelectedEditTitleChange}
+        setIsShowModal={setIsShowEditModal}
+        selectedPriority={selectedPriority}
+        setSelectedPriority={setSelectedPriority}
+        priorityOptions={priorityOptions}
+        onClickConfirm={onClickConfirm}
       />
     </div>
   )

@@ -20,7 +20,8 @@ export interface TCreateTodo {
 
 export interface TUpdateTodo {
   id: number
-  is_active: boolean
+  is_active?: boolean
+  title?: string
   priority: 'very-high' | 'high' | 'normal' | 'low' | 'very-low'
 }
 

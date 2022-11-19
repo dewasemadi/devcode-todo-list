@@ -3,7 +3,7 @@ import Image from 'next/image'
 interface todoItemProps {
   dataCy: string
   title: string
-  isActive: boolean
+  isActive?: boolean
   priority: 'very-high' | 'high' | 'normal' | 'low' | 'very-low'
   onClickEdit: () => void
   onClickDelete: () => void
