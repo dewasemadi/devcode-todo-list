@@ -92,7 +92,7 @@ function Content() {
               key={idx}
               title={data?.title}
               createdAt={formatDate(data?.created_at)}
-              onClickTitle={() => router.push(`/activity/${data?.id}`)}
+              onClickActivityCard={() => router.push(`/activity/${data?.id}`)}
               onClickDelete={() => onShowModal(data?.id, data?.title)}
             />
           ))}

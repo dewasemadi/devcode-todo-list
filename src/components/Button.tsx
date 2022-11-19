@@ -31,7 +31,7 @@ export default function Button(props: ButtonProps) {
     <button
       type='button'
       data-cy={dataCy}
-      className={buttonStyle() + ' ' + className}
+      className={buttonStyle() + ' ' + className ?? ''}
       onClick={onClick}
       disabled={disabled ?? false}
     >
