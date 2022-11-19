@@ -29,7 +29,7 @@ export default function SortTodo(props: sortTodoProps) {
           >
             {sortOptions.map((option, idx) => (
               <li
-                data-cy={option.value}
+                data-cy='sort-selection'
                 key={idx}
                 onClick={() => {
                   setSelectedSort(option.value)
