@@ -144,7 +144,7 @@ function TitleAndAction({ data, selectedSort, setSelectedSort }: titleAndActionP
             className='text-3xl font-bold'
             style={{ lineHeight: 'unset' }}
           >
-            {truncate(todoTitle, 30)}
+            {todoTitle ?? 'Untitled'}
           </h1>
           <Button dataCy='todo-title-edit-button' onClick={onClickEdit} type='icon'>
             <Image src='/edit-icon.svg' width={18} height={18} alt='todo-back-button' />
