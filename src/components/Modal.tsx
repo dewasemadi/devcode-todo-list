@@ -36,7 +36,7 @@ export function Modal(props: modalProps) {
                 {/* title */}
                 <div data-cy='modal-delete-title'>
                   <p className='text-black text-lg leading-relaxed text-center '>{title}</p>
-                  <p className='text-black text-lg leading-relaxed font-bold text-center overflow-hidden truncate w-full max-sm:w-80'>
+                  <p className='text-black text-lg leading-relaxed font-bold text-center overflow-hidden truncate w-80 max-sm:w-80'>
                     &quot;{description}&quot;
                   </p>
                 </div>
