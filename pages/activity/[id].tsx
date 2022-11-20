@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { sort, truncate } from '@utils'
+import { sort } from '@utils'
 import { useState, useEffect } from 'react'
 import { getActivity, updateActivity } from '@services'
 import { createTodo, deleteTodo, updateTodo } from '@services'
@@ -53,6 +53,8 @@ function TitleAndAction({ data, selectedSort, setSelectedSort }: titleAndActionP
   }, [data])
 
   const updateData = () => {
+    if (todoTitle === data?.title) return // if title not changed, do nothing
+
     const body: TUpdateActivity = {
       id: data?.id,
       title: todoTitle,
@@ -141,7 +143,7 @@ function TitleAndAction({ data, selectedSort, setSelectedSort }: titleAndActionP
           <h1
             onClick={onClickEdit}
             data-cy='todo-title'
-            className='text-3xl font-bold'
+            className='text-3xl font-bold overflow-hidden truncate w-96 max-sm:w-44'
             style={{ lineHeight: 'unset' }}
           >
             {todoTitle ?? 'Untitled'}

@@ -79,7 +79,7 @@ a {
   }
 
   .activity-item-title {
-    @apply text-lg font-bold cursor-pointer w-fit;
+    @apply text-lg font-bold cursor-pointer overflow-hidden truncate w-full max-sm:w-80;
   }
 
   .activity-item-date {

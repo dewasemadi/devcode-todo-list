@@ -1,4 +1,4 @@
-import axios, { Axios, AxiosError, AxiosResponse } from 'axios'
+import axios, { AxiosError, AxiosResponse } from 'axios'
 
 /**
  * Config

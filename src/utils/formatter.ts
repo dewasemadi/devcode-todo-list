@@ -19,7 +19,3 @@ export const formatDate = (ISO_date: string) => {
   const year = date.getFullYear()
   return `${day} ${months[month_idx]} ${year}`
 }
-
-export const truncate = (str: string, n: number) => {
-  return str?.length > n ? str?.substr(0, n - 1) + '...' : str
-}
