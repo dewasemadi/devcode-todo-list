@@ -48,7 +48,7 @@ export function AddAndEditTodo(props: addTodoProps) {
   return (
     <Show when={isShowModal}>
       <div data-cy='modal-add' className='floating-container' onClick={() => setIsShowModal(false)}>
-        <div className='relative max-w-4xl container' onClick={(e) => e.stopPropagation()}>
+        <div className='relative max-w-3xl container sm:p-0' onClick={(e) => e.stopPropagation()}>
           {/*content*/}
           <div className='border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none'>
             {/*header*/}

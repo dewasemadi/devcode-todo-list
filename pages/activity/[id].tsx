@@ -122,7 +122,7 @@ function TitleAndAction({ data, selectedSort, setSelectedSort }: titleAndActionP
   }
 
   return (
-    <div className='flex flex-col sm:flex-row max-sm:gap-8 justify-between items-start sm:items-center'>
+    <div className='flex flex-col md:flex-row max-md:gap-8 justify-between items-start md:items-center'>
       <div className='flex items-center gap-5 max-sm:w-full'>
         <Button type='icon' onClick={onClickBack} dataCy='todo-back-button'>
           <Image src='/back-icon.svg' width={15} height={15} alt='todo-back-button' />
@@ -153,7 +153,7 @@ function TitleAndAction({ data, selectedSort, setSelectedSort }: titleAndActionP
           </Button>
         </Show>
       </div>
-      <div className='flex items-center gap-5 max-sm:w-full max-sm:justify-end'>
+      <div className='flex items-center gap-5 max-md:w-full max-md:justify-end'>
         <Show when={isDataEmpty}>
           <div className='sort-container'>
             <Button
