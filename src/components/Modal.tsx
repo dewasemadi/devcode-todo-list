@@ -17,8 +17,8 @@ export function Modal(props: modalProps) {
 
   return (
     <Show when={isShowModal}>
-      <OutsideWrapper callback={() => setIsShowModal(false)}>
-        <div data-cy={dataCy} className='floating-container'>
+      <div data-cy={dataCy} className='floating-container'>
+        <OutsideWrapper callback={() => setIsShowModal(false)}>
           <div className='relative container max-w-2xl'>
             {/*content*/}
             <div className='border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none'>
@@ -62,8 +62,8 @@ export function Modal(props: modalProps) {
               </div>
             </div>
           </div>
-        </div>
-      </OutsideWrapper>
+        </OutsideWrapper>
+      </div>
       <div className='opacity-25 fixed inset-0 z-40 bg-black'></div>
     </Show>
   )
