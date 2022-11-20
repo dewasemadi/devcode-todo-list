@@ -1,17 +1,11 @@
 import Image from 'next/image'
 import { useState } from 'react'
+import { formatDate } from '@utils'
 import { useRouter } from 'next/router'
-import Show from '../src/components/Show'
-import Modal from '../src/components/Modal'
-import Alert from '../src/components/Alert'
-import Layout from '../src/components/Layout'
-import Button from '../src/components/Button'
-import Spinner from '../src/components/Spinner'
-import { formatDate } from '../src/utils/formatter'
-import ActivityItem from '../src/components/ActivityItem'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
-import { TGetActivities, TCreateActivity } from '../src/services/types'
-import { getActivities, createActivity, deleteActivity } from '../src/services/activityService'
+import { TGetActivities, TCreateActivity } from '@src/services/types'
+import { getActivities, createActivity, deleteActivity } from '@services'
+import { Show, Modal, Alert, Layout, Button, Spinner, ActivityItem } from '@components'
 
 function TitleAndAction() {
   const queryClient = useQueryClient()

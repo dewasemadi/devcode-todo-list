@@ -10,7 +10,7 @@ interface todoItemProps {
   onCheckboxChange: () => void
 }
 
-export default function TodoItem(props: todoItemProps) {
+export function TodoItem(props: todoItemProps) {
   const { dataCy, title, isActive, priority, onClickEdit, onClickDelete, onCheckboxChange } = props
 
   const getPriorityColor = () => {

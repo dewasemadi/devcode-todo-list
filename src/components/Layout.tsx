@@ -1,12 +1,12 @@
 import Head from 'next/head'
-import Header from './Header'
+import { Header } from '@components'
 
 interface LayoutProps {
   titleAndAction: React.ReactNode
   content: React.ReactNode
 }
 
-export default function Layout({ titleAndAction, content }: LayoutProps) {
+export function Layout({ titleAndAction, content }: LayoutProps) {
   return (
     <div>
       <Head>

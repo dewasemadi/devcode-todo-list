@@ -8,7 +8,7 @@ interface activityItemProps {
   onClickDelete: () => void
 }
 
-export default function ActivityItem(props: activityItemProps) {
+export function ActivityItem(props: activityItemProps) {
   const { dataCy, title, createdAt, onClickActivityCard, onClickDelete } = props
 
   return (

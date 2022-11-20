@@ -1,8 +1,6 @@
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
-import Button from './Button'
-import OutsideWrapper from './OutsideWrapper'
-import Show from './Show'
+import { Button, OutsideWrapper, Show } from '@components'
 
 interface TOption {
   color: string
@@ -23,7 +21,7 @@ interface addTodoProps {
   onClickConfirm: () => void
 }
 
-export default function AddAndEditTodo(props: addTodoProps) {
+export function AddAndEditTodo(props: addTodoProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [previewSelectedTitle, setPreviewSelectedTitle] = useState<string | undefined>('')
   const [previewSelectedColor, setPreviewSelectedColor] = useState<string | undefined>('')
@@ -87,7 +85,7 @@ export default function AddAndEditTodo(props: addTodoProps) {
                 <h6 data-cy='modal-add-priority-title' className='text-md font-medium'>
                   PRIORITY
                 </h6>
-                <div className='mt-2'>
+                <div className='mt-2 w-fit'>
                   {/* dropdown */}
                   <OutsideWrapper callback={() => setIsOpen(false)}>
                     <button

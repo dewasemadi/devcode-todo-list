@@ -1,12 +1,12 @@
-import { useOutside } from '../hooks/useOutside'
 import { useRef } from 'react'
+import { useOutside } from '@hooks'
 
 interface outsideWrapperProps {
   children: React.ReactNode
   callback: () => void
 }
 
-export default function OutsideWrapper({ children, callback }: outsideWrapperProps) {
+export function OutsideWrapper({ children, callback }: outsideWrapperProps) {
   const wrapperRef = useRef(null)
   useOutside(wrapperRef, callback)
 

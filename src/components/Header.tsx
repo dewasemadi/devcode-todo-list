@@ -1,4 +1,4 @@
-export default function NavBar() {
+export function Header() {
   return (
     <div data-cy='header-background' className='header-background'>
       <h1 data-cy='header-title' className='header-title'>

@@ -3,6 +3,6 @@ interface showProps {
   children: React.ReactNode
 }
 
-export default function Show({ when, children }: showProps) {
+export function Show({ when, children }: showProps) {
   return <>{when && children}</>
 }

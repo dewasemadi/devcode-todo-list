@@ -1,21 +1,13 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { sort, truncate } from '@utils'
 import { useState, useEffect } from 'react'
-import Modal from '../../src/components/Modal'
-import Alert from '../../src/components/Alert'
-import Show from '../../src/components/Show'
-import Layout from '../../src/components/Layout'
-import Button from '../../src/components/Button'
-import Spinner from '../../src/components/Spinner'
-import { truncate } from '../../src/utils/formatter'
-import TodoItem from '../../src/components/TodoItem'
-import SortTodo from '../../src/components/SortTodo'
-import AddAndEditTodo from '../../src/components/AddAndEditTodo'
+import { getActivity, updateActivity } from '@services'
+import { createTodo, deleteTodo, updateTodo } from '@services'
+import { Modal, Alert, Show, Layout, Button } from '@components'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
-import { getActivity, updateActivity } from '../../src/services/activityService'
-import { createTodo, deleteTodo, updateTodo } from '../../src/services/todoService'
-import { TUpdateActivity, TCreateTodo, TGetAllTodo, TUpdateTodo } from '../../src/services/types'
-import { sort } from '../../src/utils/sort'
+import { Spinner, TodoItem, SortTodo, AddAndEditTodo } from '@components'
+import { TUpdateActivity, TCreateTodo, TGetAllTodo, TUpdateTodo } from '@src/services/types'
 
 interface baseProps {
   data: any
@@ -50,6 +42,7 @@ function TitleAndAction({ data, selectedSort, setSelectedSort }: titleAndActionP
   const [isShowModal, setIsShowModal] = useState(false)
   const [isEditTitle, setIsEditTitle] = useState(false)
   const [isShowSortTodo, setIsShowSortTodo] = useState(false)
+  const isDataEmpty = data && data?.todo_items.length !== 0
   const router = useRouter()
   const queryClient = useQueryClient()
   const activityMutation = useMutation(updateActivity)
@@ -159,7 +152,7 @@ function TitleAndAction({ data, selectedSort, setSelectedSort }: titleAndActionP
         </Show>
       </div>
       <div className='flex items-center gap-5 max-sm:w-full max-sm:justify-end'>
-        <Show when={data && data?.todo_items.length !== 0}>
+        <Show when={isDataEmpty}>
           <div className='sort-container'>
             <Button
               dataCy='todo-sort-button'
@@ -360,9 +353,13 @@ export default function Activity() {
   const [id, setId] = useState(-1)
   const [selectedSort, setSelectedSort] = useState<any>('sort-latest')
 
-  const { data, isLoading } = useQuery('todo', () => getActivity(id), {
+  const { data, isLoading, isError } = useQuery('todo', () => getActivity(id), {
     enabled: id !== -1,
   })
+
+  if (isError) {
+    router.push('/404')
+  }
 
   useEffect(() => {
     if (!router.isReady) return

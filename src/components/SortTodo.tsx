@@ -1,6 +1,5 @@
-import Show from './Show'
 import Image from 'next/image'
-import OutsideWrapper from './OutsideWrapper'
+import { Show, OutsideWrapper } from '@components'
 
 interface TOption {
   icon: string
@@ -16,7 +15,7 @@ interface sortTodoProps {
   setIsShowSortTodo: (value: boolean) => void
 }
 
-export default function SortTodo(props: sortTodoProps) {
+export function SortTodo(props: sortTodoProps) {
   const { isShowDropdown, sortOptions, selectedSort, setSelectedSort, setIsShowSortTodo } = props
 
   return (

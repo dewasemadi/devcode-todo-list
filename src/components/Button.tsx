@@ -9,7 +9,7 @@ interface ButtonProps {
   className?: string
 }
 
-export default function Button(props: ButtonProps) {
+export function Button(props: ButtonProps) {
   const { dataCy, children, onClick, type = 'base', disabled, className } = props
 
   const buttonStyle = (): string => {

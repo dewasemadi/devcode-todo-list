@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import Show from './Show'
+import { Show } from '@components'
 
 interface alertProps {
   dataCy: string
@@ -10,7 +10,7 @@ interface alertProps {
   message: string
 }
 
-export default function Alert(props: alertProps) {
+export function Alert(props: alertProps) {
   const { dataCy, type = 'success', iconPath, message, isShowAlert, setIsShowAlert } = props
 
   return (

@@ -1,7 +1,7 @@
-import '../styles/globals.css'
+import '@styles/globals.css'
 import type { AppProps } from 'next/app'
-import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
 const queryClient = new QueryClient()
 
